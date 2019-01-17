@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class HomeController extends Controller
+class ProfileController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -23,6 +24,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        if (Auth::user()->isAdmin()) {
+            return view('admin');
+        } else {
+            $threads = Auth::user()->thread->where('parent', '=', 0);
+            return view('profile', compact(['threads']));
+        }
     }
 }

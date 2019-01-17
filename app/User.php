@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'admin',
     ];
 
     /**
@@ -26,4 +26,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    public function thread()
+    {
+        return $this->hasMany('App\Thread', 'author');
+    }
+    
+    public function isAdmin() : bool
+    {
+        return $this->admin;
+    }
 }
