@@ -8,7 +8,7 @@ class Thread extends Model
 {
     
     protected $fillable = [
-        'title', 'content', 'author',
+        'title', 'content', 'author', 'parent',
     ];
     
 }

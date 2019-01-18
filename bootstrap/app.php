@@ -52,4 +52,8 @@ $app->singleton(
 |
 */
 
+$app->configureMonologUsing(function($monolog) {
+    $monolog->pushHandler(new \Monolog\Handler\StreamHandler(storage_path() . '/logs/emails.log')); // false value as third argument to disable bubbling up the stack
+});
+
 return $app;

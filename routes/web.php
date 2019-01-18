@@ -17,6 +17,7 @@ Route::get('/', function () {
 
 Route::group(['middleware' => ['web', 'auth']], function () {
     Route::resource('thread', 'ThreadController');
+    Route::post('thread.comment', 'ThreadController@comment');
 });
 
 Auth::routes();

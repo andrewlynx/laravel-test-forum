@@ -4,13 +4,38 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            @foreach ($threads->where('parent', '=', 0) as $thread)
+            <a href="/thread">< Back to thread list</a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <p><b>{{$thread->title}}</b></p>
+                    Posted: {{$thread->created_at}} by <b>{{$user->find($thread->author)->name}}</b>
+                </div>
+                <div class="panel-body">
+                    <p>{{$thread->content}}</p>
+                </div>
+            </div>
+            {{ Form::open(['url' => 'thread.comment']) }}
+                    <div class="row">
+                        <div class='form-group col-md-12'>
+                            <div class="row">
+                                <div class='form-group col-md-3'>
+                                    {{ Form::label('content', 'Comment thread (maximum 255 characters)') }}
+                                </div>
+                                <div class='form-group col-md-9'>
+                                    {{ Form::textarea('content', Input::old('content'), ["class" => "form-control"]) }}
+                                    {{ Form::hidden('parent', $thread->id) }}
+                                </div>
+                            </div>
+                            {{ Form::submit('Comment', ['class' => 'btn btn-primary']) }}
+                        </div>
+                    </div>
+                    {{ Form::close() }}
+            <h4>Thread comments:</h4>
+            @foreach ($threads->where('parent', '=', $thread->id) as $comment)
                 <div class="panel panel-default">
-                    <div class="panel-heading"><b><a href="/thread/{{$thread->id}}">{{$thread->title}}</a></b></div>
+                    <div class="panel-heading"><p>{{$user->find($comment->author)->name}} wrote:</p> </div>
                     <div class="panel-body">
-                        <p>{{$thread->content}}</p>
-                        <p>Author: {{$user->find($thread->author)->name}}</p> 
-                        <p>Replies {{count($threads->where('parent', '=', $thread->id))}}</p>
+                        <p>{{$comment->content}}</p>
                     </div>
                 </div>
             @endforeach

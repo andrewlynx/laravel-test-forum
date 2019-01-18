@@ -5,13 +5,13 @@
         <group>
             <file>file:/var/www/forum/app/Http/Controllers/ThreadController.php</file>
             <file>file:/var/www/forum/app/User.php</file>
-            <file>file:/var/www/forum/app/Http/Controllers/Auth/LoginController.php</file>
             <file>file:/var/www/forum/app/Thread.php</file>
             <file>file:/var/www/forum/app/Http/Controllers/ProfileController.php</file>
+            <file>file:/var/www/forum/database/migrations/2019_01_17_103455_create_thread_table.php</file>
             <file>file:/var/www/forum/routes/web.php</file>
             <file>file:/var/www/forum/.env</file>
-            <file>file:/var/www/forum/app/Http/Controllers/Auth/RegisterController.php</file>
             <file>file:/var/www/forum/resources/views/profile.blade.php</file>
+            <file>file:/var/www/forum/resources/views/thread.blade.php</file>
         </group>
     </open-files>
 </project-private>

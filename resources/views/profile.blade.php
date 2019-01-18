@@ -13,12 +13,32 @@
                             {{ session('status') }}
                         </div>
                     @endif
+                    @if (Session::has('message'))
+                        <div class="alert alert-info">
+                            {{ Session::get('message') }}
+                        </div>
+                    @endif
                     @if (count($threads) > 0)
                         <h4>You have {{count($threads)}} active threads:</h4>
                         @foreach ($threads as $thread)
-                        <p><b>{{$thread->title}}</b>
-                        {{substr($thread->content, 0, 75)}}</p>
+                            <p>
+                                <a href="thread/{{ $thread->id }}" class="btn btn-sm btn-primary pull-left">VIEW</a>
+                                
+                                <a href="thread/{{ $thread->id }}/edit" class="btn btn-sm btn-success pull-left">EDIT</a>
+
+                                {{ Form::open([
+                                    'url' => route('thread.destroy', $thread->id),
+                                    'method' => 'delete'
+                                ]) }}
+                                    {{ Form::submit('DELETE', ['class' => 'btn btn-sm btn-danger pull-left']) }}
+                                {{ Form::close() }} 
+                                <b>{{$thread->title}}</b>
+                                {{substr($thread->content, 0, 75)}}
+                            </p>
                         @endforeach
+                        @if (count($threads) > 4)
+                            You can have only 5 active threads. If you create new thread, the oldest will be deleted.
+                        @endif
                     @else
                         <h3>You have no active threads now.</h3>
                     @endif
