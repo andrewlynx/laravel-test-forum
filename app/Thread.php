@@ -11,4 +11,9 @@ class Thread extends Model
         'title', 'content', 'author', 'parent',
     ];
     
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'author');
+    }
+    
 }

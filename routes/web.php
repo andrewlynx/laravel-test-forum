@@ -18,8 +18,8 @@ Route::get('/', function () {
 Route::group(['middleware' => ['web', 'auth']], function () {
     Route::resource('thread', 'ThreadController');
     Route::post('thread.comment', 'ThreadController@comment');
+    
+    Route::get('/profile', 'ProfileController@index')->name('profile');
 });
 
 Auth::routes();
-
-Route::get('/profile', 'ProfileController@index')->name('profile');

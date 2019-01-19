@@ -19,9 +19,24 @@ class ThreadController extends Controller
      */
     public function index()
     {
-        $threads = Thread::orderBy('id', 'DESC')->get();
-        $user = new User;
-        return view('threads', compact(['threads', 'user']));
+        $query = Thread::query();
+        $query->where('parent', '=', 0);
+        
+        $query->when(null !== request('author'), function($q) {
+            return $q->whereIn('author', request('author', 0));
+        });
+        
+        $query->when(null !== request('byname'), function($q) {
+            return $q->orderBy('title', 'ASC');
+        });
+        $query->when(null == request('byname'), function($q) {
+            return $q->orderBy('id', 'DESC');
+        });
+        
+        $threads = $query->get();
+        
+        $authors = Thread::select(['author'])->distinct()->where('parent', '=', 0)->groupBy('author')->get();
+        return view('threads', compact(['threads', 'authors']));
     }
 
     /**
@@ -45,7 +60,7 @@ class ThreadController extends Controller
         $request->validate([
             'title' => [
                 'required',
-                'unique:threads,title',
+                'unique:threads,title,' . $thread->id,
                 'min:3',
                 'regex:/^[a-zA-Z]+$/u',
             ],
@@ -82,7 +97,7 @@ class ThreadController extends Controller
         $request['title'] = '';
         $author = Auth::user()->id;
         $request['author'] = $author;
-        //Thread::create($request->all());
+        Thread::create($request->all());
         //find thread author email
         $parentAuthor = User::find(Thread::find($request->parent)->author);
         
@@ -111,7 +126,7 @@ class ThreadController extends Controller
      */
     public function edit(Thread $thread)
     {
-        //
+        return view('edit', compact(['thread']));
     }
 
     /**
@@ -123,7 +138,19 @@ class ThreadController extends Controller
      */
     public function update(Request $request, Thread $thread)
     {
-        //
+        $request->validate([
+            'title' => [
+                'required',
+                'unique:threads,title,' . $thread->id,
+                'min:3',
+                'regex:/^[a-zA-Z]+$/u',
+            ],
+            'content' => 'max:255'
+        ]);
+        
+        $thread->fill($request->all())->save();
+        Session::flash('message', 'Thread ' . $thread->title . ' updated');
+        return redirect('profile');
     }
 
     /**
