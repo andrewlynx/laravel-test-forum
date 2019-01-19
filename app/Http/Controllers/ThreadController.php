@@ -20,7 +20,6 @@ class ThreadController extends Controller
     public function index()
     {
         $query = Thread::query();
-        $query->where('parent', '=', 0);
         
         $query->when(null !== request('author'), function($q) {
             return $q->whereIn('author', request('author', 0));

@@ -20,7 +20,7 @@
                     {{ Form::submit('Filter', ['class' => 'btn btn-sm btn-primary']) }}
                 {{ Form::close() }}
             </p>
-            @foreach ($threads as $thread)
+            @foreach ($threads->where('parent', '=', 0) as $thread)
                 <div class="panel panel-default">
                     <div class="panel-heading"><b><a href="/thread/{{$thread->id}}">{{$thread->title}}</a></b></div>
                     <div class="panel-body">

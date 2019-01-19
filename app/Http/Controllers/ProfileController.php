@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Thread;
 
 class ProfileController extends Controller
 {
@@ -25,7 +26,8 @@ class ProfileController extends Controller
     public function index()
     {
         if (Auth::user()->isAdmin()) {
-            return view('admin');
+            $threads = Thread::all();
+            return view('admin', compact(['threads']));
         } else {
             $threads = Auth::user()->thread->where('parent', '=', 0);
             return view('profile', compact(['threads']));

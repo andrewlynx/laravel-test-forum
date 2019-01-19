@@ -59,8 +59,12 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/profile') }}">Profile</a>
-                        <a href="{{ url('/thread') }}">Threads</a>
+                        @if (Auth::user()->isAdmin())
+                            <a href="{{ url('/profile') }}">Admin</a>
+                        @else
+                            <a href="{{ url('/profile') }}">Profile</a>
+                            <a href="{{ url('/thread') }}">Threads</a>
+                        @endif
                     @else
                         <a href="{{ route('login') }}">Login</a>
                         <a href="{{ route('register') }}">Register</a>
