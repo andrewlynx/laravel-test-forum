@@ -69,7 +69,7 @@
                             </div>
                             <div class="row">
                                 <div class='form-group col-md-3'>
-                                    {{ Form::label('content', 'Content (maximum 255 characters)') }}
+                                    {{ Form::label('content', 'Content (maximum 255 characters, must end with dot)') }}
                                 </div>
                                 <div class='form-group col-md-9'>
                                     {{ Form::textarea('content', Input::old('content'), ["class" => "form-control"]) }}

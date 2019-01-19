@@ -59,11 +59,14 @@ class ThreadController extends Controller
         $request->validate([
             'title' => [
                 'required',
-                'unique:threads,title,' . $thread->id,
+                'unique:threads,title',
                 'min:3',
                 'regex:/^[a-zA-Z]+$/u',
             ],
-            'content' => 'max:255'
+            'content' => [
+                'max:255',
+                'regex:/(\.)$/',
+            ]
         ]);
         
         $author = Auth::user()->id;
@@ -144,7 +147,10 @@ class ThreadController extends Controller
                 'min:3',
                 'regex:/^[a-zA-Z]+$/u',
             ],
-            'content' => 'max:255'
+            'content' => [
+                'max:255',
+                'regex:/(\.)$/',
+            ]
         ]);
         
         $thread->fill($request->all())->save();
