@@ -12,6 +12,10 @@ use App\Mail\LogMail;
 
 class ThreadController extends Controller
 {
+    private $contentValidation = [
+        'max:255',
+        'regex:/(\.)$/',
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -39,16 +43,6 @@ class ThreadController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -63,10 +57,7 @@ class ThreadController extends Controller
                 'min:3',
                 'regex:/^[a-zA-Z]+$/u',
             ],
-            'content' => [
-                'max:255',
-                'regex:/(\.)$/',
-            ]
+            'content' => $this->contentValidation,
         ]);
         
         $author = Auth::user()->id;
@@ -93,17 +84,19 @@ class ThreadController extends Controller
     public function comment(Request $request)
     {
         $request->validate([
-            'content' => 'required|max:255'
+            'content' => $this->contentValidation,
         ]);
-        
-        $request['title'] = '';
+
         $author = Auth::user()->id;
-        $request['author'] = $author;
+        $request->merge([
+            'author' => $author,
+            'title' => '',
+        ]);
         Thread::create($request->all());
         //find thread author email
         $parentAuthor = User::find(Thread::find($request->parent)->author);
         
-        Mail::to($parentAuthor->email)->send(new LogMail(User::find($author), $parentAuthor));
+        Mail::to($parentAuthor->email)->send(new LogMail(Auth::user(), $parentAuthor));
         return redirect()->back();
     }
 
@@ -116,8 +109,7 @@ class ThreadController extends Controller
     public function show(Thread $thread)
     {
         $threads = Thread::get();
-        $user = new User;
-        return view('thread', compact(['threads', 'user', 'thread']));
+        return view('thread', compact(['threads', 'thread']));
     }
 
     /**
@@ -147,10 +139,7 @@ class ThreadController extends Controller
                 'min:3',
                 'regex:/^[a-zA-Z]+$/u',
             ],
-            'content' => [
-                'max:255',
-                'regex:/(\.)$/',
-            ]
+            'content' => $this->contentValidation,
         ]);
         
         $thread->fill($request->all())->save();

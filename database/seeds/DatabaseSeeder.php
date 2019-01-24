@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
         DB::table('threads')->truncate(); //If you want to reset to 50. See note below.
-        //$this->call('UserTableSeeder');
+        $this->call('UserTableSeeder');
         $this->call('ThreadTableSeeder');
     }
 }

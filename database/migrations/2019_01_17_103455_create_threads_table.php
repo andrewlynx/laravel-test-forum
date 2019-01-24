@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateThreadTable extends Migration
+class CreateThreadsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateThreadTable extends Migration
      */
     public function up()
     {
-        Schema::create('thread', function (Blueprint $table) {
+        Schema::create('threads', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title', 30);
             $table->string('content');

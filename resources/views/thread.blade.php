@@ -8,7 +8,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <p><b>{{$thread->title}}</b></p>
-                    Posted: {{$thread->created_at}} by <b>{{$user->find($thread->author)->name}}</b>
+                    Posted: {{$thread->created_at}} by <b>{{$thread->user->name}}</b>
                 </div>
                 <div class="panel-body">
                     <p>{{$thread->content}}</p>
@@ -33,7 +33,7 @@
             <h4>Thread comments:</h4>
             @foreach ($threads->where('parent', '=', $thread->id) as $comment)
                 <div class="panel panel-default">
-                    <div class="panel-heading"><p>{{$user->find($comment->author)->name}} wrote:</p> </div>
+                    <div class="panel-heading"><p>{{$comment->user->name}} wrote:</p> </div>
                     <div class="panel-body">
                         <p>{{$comment->content}}</p>
                     </div>
